@@ -17,7 +17,7 @@
               <l-marker :lat-lng="[datas[0].lat, datas[0].lon]"></l-marker>
             </div>
           </l-map>
-          {{ datas }}
+          {{ newData }}
         </div>
       </div>
     </div>
@@ -42,6 +42,7 @@ export default {
       newArea: {},
       length: null,
       results: {},
+      newData: [],
     };
   },
   props: ["contacts", "areas"],
@@ -50,13 +51,14 @@ export default {
 
     for (var i = 0; i <= this.newArea.length - 1; i++) {
       var url = this.newArea[i].area;
+      var newData = new Array(this.newArea.length - 1);
       axios
         .get(
           `https://nominatim.openstreetmap.org/search.php?q=${url}&polygon_geojson=1&format=jsonv2`
         )
         .then((response) => (this.datas = response.data))
+        .then((this.newData = [...newData].push(this.datas)))
         .then(console.log(this.datas));
-      break;
     }
   },
   methods: {
